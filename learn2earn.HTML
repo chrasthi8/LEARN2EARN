@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEARN2EARN | Code Kanyarasi</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f3fc;color:#292541}
+button{cursor:pointer;border:0;border-radius:9px;padding:11px 17px;font-weight:bold}
+input,textarea,select{width:100%;padding:12px;border:1px solid #ddd8eb;border-radius:9px;margin:7px 0 14px;font:inherit}
+textarea{min-height:100px}
+.primary{background:#6654cc;color:white}
+.secondary{background:#eeeaff;color:#6654cc}
+.danger{background:#ffe9e9;color:#b23d3d}
+.muted{color:#817d91;font-size:14px}
+h2{margin-top:0}
+.hidden{display:none!important}
+
+/* LOGIN */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{background:white;padding:32px;border-radius:18px;width:100%;max-width:430px;box-shadow:0 10px 35px #30235d15}
+.logo{font-size:29px;font-weight:bold;color:#6654cc}
+.logo span{color:#292541}
+.tagline{color:#817d91;margin-bottom:25px}
+.auth-card label{font-size:13px;font-weight:bold}
+.auth-card button{width:100%;margin-top:8px}
+.switch{text-align:center;margin-top:20px;font-size:14px}
+.switch a{color:#6654cc;cursor:pointer;font-weight:bold}
+
+/* APP */
+#app{display:none}
+header{background:white;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px #0000000a}
+header .logo{font-size:22px}
+.header-right{display:flex;align-items:center;gap:12px}
+.coins{background:#fff5d9;color:#986600;padding:11px 15px;border-radius:25px;font-weight:bold}
+.avatar{width:42px;height:42px;border-radius:50%;background:#eeeaff;color:#6654cc;font-weight:bold;font-size:18px}
+
+.layout{max-width:1250px;margin:25px auto;padding:0 18px;display:flex;gap:20px}
+.sidebar{width:210px;flex-shrink:0;background:white;padding:15px;border-radius:15px;height:max-content;position:sticky;top:90px}
+.nav{width:100%;text-align:left;background:white;color:#5e5974;margin:4px 0;padding:13px}
+.nav.active,.nav:hover{background:#eeeaff;color:#6654cc}
+main{flex:1;min-width:0}
+.page{display:none}
+.page.active{display:block}
+.welcome{background:linear-gradient(120deg,#30245e,#7968df);padding:28px;border-radius:17px;color:white;margin-bottom:18px}
+.welcome p{color:#e5e0ff}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.card{background:white;border:1px solid #e9e5f1;padding:20px;border-radius:15px;margin-bottom:15px}
+.action{cursor:pointer;transition:.2s}
+.action:hover{transform:translateY(-3px)}
+.action .emoji{font-size:30px}
+.action h3{margin-bottom:7px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:17px}
+.item{padding:13px 0;border-bottom:1px solid #eee}
+.tag{display:inline-block;background:#eeeaff;color:#6654cc;border-radius:20px;padding:5px 10px;font-size:12px;font-weight:bold}
+.reward{color:#a36c00;font-weight:bold}
+.problem-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.form-card{max-width:700px}
+.row{display:flex;gap:12px}
+.row>div{flex:1}
+.profile{display:flex;align-items:center;gap:15px;margin-bottom:20px}
+.big-avatar{width:65px;height:65px;border-radius:50%;background:#eeeaff;color:#6654cc;display:grid;place-items:center;font-size:27px;font-weight:bold}
+.balance{font-size:35px;font-weight:bold;color:#a36c00}
+.empty{text-align:center;padding:25px;color:#888;background:#faf9fd;border-radius:10px}
+.toast{padding:12px;background:#e9f8ed;color:#26713b;border-radius:9px;margin:12px 0;display:none}
+
+/* WHITEBOARD */
+canvas{width:100%;height:260px;border:2px solid #ded9ed;border-radius:10px;background:white;touch-action:none}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0}
+@media(max-width:750px){
+.layout{display:block}
+.sidebar{width:100%;display:flex;overflow-x:auto;position:static;margin-bottom:15px}
+.nav{white-space:nowrap;width:auto;flex-shrink:0}
+.grid,.actions{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+.row{display:block}
+header{padding:12px}
+.header-right{gap:6px}
+.coins{padding:9px;font-size:12px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN AND SIGNUP -->
+
+<section id="auth">
+<div class="auth-card">
+
+<div class="logo">LEARN<span>2EARN</span></div>
+<p class="tagline">Learn. Explain. Earn. | By Code Kanyarasi</p>
+
+<div id="loginForm">
+<h2>Welcome Back!</h2>
+<p class="muted">Login to continue your learning journey.</p>
+
+<label>College Email</label>
+<input id="loginEmail" type="email" placeholder="student@college.edu">
+
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter password">
+
+<button class="primary" onclick="login()">Login</button>
+
+<p class="switch">New student? <a onclick="toggleAuth()">Create Account</a></p>
+</div>
+
+<div id="signupForm" class="hidden">
+<h2>Create Account</h2>
+<p class="muted">Join the LEARN2EARN student community.</p>
+
+<label>Student Name</label>
+<input id="regName" placeholder="Enter your name">
+
+<label>College Email</label>
+<input id="regEmail" type="email" placeholder="Enter college email">
+
+<label>Password</label>
+<input id="regPassword" type="password" placeholder="Create password">
+
+<button class="primary" onclick="signup()">Sign Up</button>
+
+<p class="switch">Already registered? <a onclick="toggleAuth()">Login</a></p>
+</div>
+
+<p class="muted" style="text-align:center;font-size:11px">
+Hackathon demonstration • Demo accounts are stored in this browser.
+</p>
+
+</div>
+</section>
+
+
+<!-- MAIN APPLICATION -->
+
+<div id="app">
+
+<header>
+<div class="logo">L2E</div>
+
+<div class="header-right">
+<button class="coins" onclick="page('wallet')">
+🪙 <span id="topCoins">100</span>
+</button>
+<button class="avatar" onclick="page('profile')" id="topAvatar">S</button>
+</div>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar">
+<button class="nav active" data-page="dashboard" onclick="page('dashboard')">🏠 Dashboard</button>
+<button class="nav" data-page="solve" onclick="page('solve')">🔍 Solve Problem</button>
+<button class="nav" data-page="post" onclick="page('post')">➕ Post Problem</button>
+<button class="nav" data-page="previous" onclick="page('previous')">🕘 Previous Problems</button>
+<button class="nav" data-page="wallet" onclick="page('wallet')">🪙 Coin Wallet</button>
+<button class="nav" data-page="profile" onclick="page('profile')">👤 My Profile</button>
+<button class="nav" onclick="logout()">↪ Logout</button>
+</aside>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section class="page active" id="dashboard">
+
+<div class="welcome">
+<h1>Hello, <span id="helloName">Student</span>! 👋</h1>
+<p>Learn something new. Help someone. Earn coins.</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Previous Doubts</h3>
+<div id="dashPrevious"></div>
+<button class="secondary" onclick="page('previous')">View all</button>
+</div>
+
+<div class="card">
+<h3> My Coin Wallet</h3>
+<div class="balance"><span id="dashCoins">100</span></div>
+<p class="muted">Your available coins</p>
+<button class="secondary" onclick="page('wallet')">View wallet</button>
+</div>
+
+</div>
+
+<div class="actions">
+
+<div class="card action" onclick="page('solve')">
+<div class="emoji">🔍</div>
+<h3>Solve Problem</h3>
+<p class="muted">Help students with their doubts and earn coins.</p>
+<button class="primary">Find Problems</button>
+</div>
+
+<div class="card action" onclick="page('post')">
+<div class="emoji">✍️</div>
+<h3>Post Problem</h3>
+<p class="muted">Post your doubt and offer coins as a reward.</p>
+<button class="primary">Post a Doubt</button>
+</div>
+
+</div>
+</section>
+
+
+<!-- POST PROBLEM -->
+
+<section class="page" id="post">
+<div class="card form-card">
+<h2>Post a Problem ✍️</h2>
+<p class="muted">Ask your doubt and choose a reward.</p>
+
+<label>Problem Title</label>
+<input id="problemTitle" placeholder="Example: Explain Python inheritance">
+
+<div class="row">
+<div>
+<label>Subject</label>
+<select id="subject">
+<option>Python</option>
+<option>Mathematics</option>
+<option>Java</option>
+<option>HTML & CSS</option>
+<option>JavaScript</option>
+<option>Physics</option>
+<option>Other</option>
+</select>
+</div>
+<div>
+<label>Coin Reward</label>
+<input id="reward" type="number" min="1" value="20">
+</div>
+</div>
+
+<label>Describe Your Doubt</label>
+<textarea id="description" placeholder="Explain what you don't understand..."></textarea>
+
+<button class="primary" onclick="postProblem()">Post Problem</button>
+<div class="toast" id="postToast"></div>
+</div>
+</section>
+
+
+<!-- SOLVE PROBLEM -->
+
+<section class="page" id="solve">
+<h2>🔍 Solve Problems</h2>
+<p class="muted">Find questions and share your knowledge.</p>
+<div id="solveList"></div>
+</section>
+
+
+<!-- PREVIOUS PROBLEMS -->
+
+<section class="page" id="previous">
+<h2>🕘 Previous Problems</h2>
+<p class="muted">Track your questions and learning activities.</p>
+<div id="previousList"></div>
+</section>
+
+
+<!-- WALLET -->
+
+<section class="page" id="wallet">
+<div class="card">
+<h2>🪙 My Coin Wallet</h2>
+<p class="muted">Your available balance</p>
+<div class="balance"><span id="walletCoins">100</span> coins</div>
+<p class="muted">Earn coins by helping other students.</p>
+</div>
+
+<div class="card">
+<h3>Coin History</h3>
+<div id="history"></div>
+</div>
+</section>
+
+
+<!-- PROFILE -->
+
+<section class="page" id="profile">
+<div class="card form-card">
+<div class="profile">
+<div class="big-avatar" id="bigAvatar">S</div>
+<div>
+<h2 id="profileName">Student</h2>
+<p class="muted" id="profileEmail"></p>
+</div>
+</div>
+
+<h3>My Profile</h3>
+<label>Student Name</label>
+<input id="editName">
+
+<label>College Email</label>
+<input id="editEmail" type="email">
+
+<button class="primary" onclick="updateProfile()">Save Changes</button>
+</div>
+</section>
+
+
+<!-- LEARNING ROOM -->
+
+<section class="page" id="room">
+<button class="secondary" onclick="page('solve')">← Back</button>
+
+<div class="card" style="margin-top:15px">
+<h2>🎓 Peer Learning Room</h2>
+
+<h3 id="roomTitle"></h3>
+<p class="muted" id="roomSubject"></p>
+<p id="roomDescription"></p>
+
+<div class="grid">
+<div class="card">
+<b>🙋 Question Owner</b>
+<p id="ownerName"></p>
+</div>
+<div class="card">
+<b>🎓 Helper</b>
+<p id="helperName"></p>
+</div>
+</div>
+
+<h3>📝 Explanation</h3>
+<textarea id="answer" placeholder="Explain the topic step by step..."></textarea>
+
+<h3>🖊️ Digital Whiteboard</h3>
+<p class="muted">Draw and explain your solution below.</p>
+
+<div class="tools">
+<button class="secondary" onclick="setPen()">✏️ Pen</button>
+<button class="secondary" onclick="setEraser()">🧽 Eraser</button>
+<button class="secondary" onclick="clearBoard()">Clear</button>
+</div>
+
+<canvas id="board" width="900" height="400"></canvas>
+
+<div class="tools">
+<button class="secondary" onclick="shareScreen()">🖥️ Share Screen</button>
+<button class="secondary" onclick="callInfo('Voice')">🎤 Voice</button>
+<button class="secondary" onclick="callInfo('Video')">📹 Video</button>
+</div>
+
+<button class="primary" id="submitAnswer" onclick="submitAnswer()">Submit Explanation</button>
+
+<button class="primary hidden" id="confirmAnswer" onclick="confirmAnswer()">✅ Confirm Solution & Release Coins</button>
+
+<div class="toast" id="roomToast"></div>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+
+
+<script>
+
+// DATABASE FOR FRONTEND DEMO
+
+const DB = "d2e_judge_demo";
+
+let store = JSON.parse(localStorage.getItem(DB)) || {
+users:[],
+problems:[],
+history:{}
+};
+
+let currentEmail = localStorage.getItem("d2e_current") || "";
+let activeId = null;
+
+function save(){
+localStorage.setItem(DB,JSON.stringify(store));
+}
+
+function user(){
+return store.users.find(u=>u.email===currentEmail);
+}
+
+function myHistory(){
+return store.history[currentEmail] || [];
+}
+
+function addHistory(text,amount){
+if(!store.history[currentEmail])store.history[currentEmail]=[];
+store.history[currentEmail].push({text,amount});
+}
+
+
+// AUTHENTICATION
+
+function toggleAuth(){
+document.getElementById("loginForm").classList.toggle("hidden");
+document.getElementById("signupForm").classList.toggle("hidden");
+}
+
+function signup(){
+
+let name=document.getElementById("regName").value.trim();
+let email=document.getElementById("regEmail").value.trim().toLowerCase();
+let password=document.getElementById("regPassword").value;
+
+if(!name || !email.includes("@") || password.length<4){
+alert("Enter valid details. Password must have at least 4 characters.");
+return;
+}
+
+if(store.users.some(u=>u.email===email)){
+alert("This email is already registered. Please login.");
+return;
+}
+
+store.users.push({
+name,email,password,coins:100
+});
+
+store.history[email]=[{text:"Welcome bonus",amount:100}];
+
+save();
+
+alert("Account created! Please login.");
+toggleAuth();
+
+document.getElementById("loginEmail").value=email;
+}
+
+function login(){
+
+let email=document.getElementById("loginEmail").value.trim().toLowerCase();
+let password=document.getElementById("loginPassword").value;
+
+let found=store.users.find(u=>u.email===email && u.password===password);
+
+if(!found){
+alert("Incorrect email or password. Please sign up first.");
+return;
+}
+
+currentEmail=email;
+localStorage.setItem("d2e_current",email);
+
+openApp();
+}
+
+function logout(){
+currentEmail="";
+localStorage.removeItem("d2e_current");
+
+document.getElementById("app").style.display="none";
+document.getElementById("auth").style.display="flex";
+
+document.getElementById("loginPassword").value="";
+}
+
+
+// PAGE NAVIGATION
+
+function page(id){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+
+document.querySelectorAll(".nav").forEach(n=>{
+n.classList.toggle("active",n.dataset.page===id);
+});
+
+render();
+
+window.scrollTo(0,0);
+}
+
+
+// OPEN DASHBOARD
+
+function openApp(){
+
+document.getElementById("auth").style.display="none";
+document.getElementById("app").style.display="block";
+
+render();
+page("dashboard");
+
+}
+
+
+// UPDATE ALL DISPLAY DATA
+
+function render(){
+
+let u=user();
+if(!u)return;
+
+document.getElementById("helloName").textContent=u.name;
+document.getElementById("topCoins").textContent=u.coins;
+document.getElementById("dashCoins").textContent=u.coins;
+document.getElementById("walletCoins").textContent=u.coins;
+
+document.getElementById("topAvatar").textContent=u.name[0].toUpperCase();
+document.getElementById("bigAvatar").textContent=u.name[0].toUpperCase();
+
+document.getElementById("profileName").textContent=u.name;
+document.getElementById("profileEmail").textContent=u.email;
+
+document.getElementById("editName").value=u.name;
+document.getElementById("editEmail").value=u.email;
+
+
+// PREVIOUS PROBLEMS
+
+let mine=store.problems.filter(p=>
+p.owner===currentEmail || p.helper===currentEmail
+);
+
+document.getElementById("dashPrevious").innerHTML=
+mine.length ?
+mine.slice(-3).reverse().map(p=>`
+<div class="item">
+<b>${esc(p.title)}</b><br>
+<span class="muted">${esc(p.subject)}</span>
+<span class="tag">${esc(p.status)}</span>
+</div>`).join("")
+:
+'<div class="empty">No previous doubts yet.</div>';
+
+document.getElementById("previousList").innerHTML=
+mine.map(p=>problemCard(p,false)).join("") ||
+'<div class="empty">Your previous problems will appear here.</div>';
+
+
+// SOLVE PROBLEMS
+
+let available=store.problems.filter(p=>
+p.status==="Open" && p.owner!==currentEmail
+);
+
+document.getElementById("solveList").innerHTML=
+available.map(p=>problemCard(p,true)).join("") ||
+'<div class="empty">No new problems available right now.</div>';
+
+
+// COIN HISTORY
+
+document.getElementById("history").innerHTML=
+myHistory().slice().reverse().map(h=>`
+<div class="item">
+${esc(h.text)}
+<b style="float:right">${h.amount>0?"+":""}${h.amount} coins</b>
+</div>`).join("") ||
+'<div class="empty">No transactions yet.</div>';
+
+}
+
+
+// SAFE TEXT DISPLAY
+
+function esc(value){
+return String(value).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
+
+
+// PROBLEM CARD
+
+function problemCard(p,canAccept){
+
+return `
+<div class="card">
+
+<h3>${esc(p.title)}</h3>
+
+<div class="muted">
+${esc(p.subject)} • Posted by ${esc(p.ownerName)}
+</div>
+
+<p>${esc(p.description)}</p>
+
+<p class="reward">🪙 ${p.reward} coins</p>
+
+<span class="tag">${esc(p.status)}</span>
+
+${p.helperName?`<p class="muted">Helper: ${esc(p.helperName)}</p>`:""}
+
+<div class="problem-actions">
+
+${canAccept?
+`<button class="primary" onclick="acceptProblem('${p.id}')">Accept Problem</button>`:
+`<button class="secondary" onclick="openRoom('${p.id}')">View Details</button>`}
+
+</div>
+</div>`;
+}
+
+
+// POST A PROBLEM
+
+function postProblem(){
+
+let title=document.getElementById("problemTitle").value.trim();
+let description=document.getElementById("description").value.trim();
+let subject=document.getElementById("subject").value;
+let reward=Number(document.getElementById("reward").value);
+
+let u=user();
+
+if(!title || !description || !Number.isInteger(reward) || reward<1){
+alert("Please enter all problem details and a valid coin reward.");
+return;
+}
+
+if(reward>u.coins){
+alert("Not enough coins in your wallet.");
+return;
+}
+
+// Reserve the reward
+
+u.coins-=reward;
+
+store.problems.unshift({
+id:Date.now().toString(),
+title,description,subject,reward,
+owner:currentEmail,
+ownerName:u.name,
+helper:"",
+helperName:"",
+status:"Open",
+answer:""
+});
+
+addHistory("Coins reserved for "+title,-reward);
+
+save();
+
+document.getElementById("problemTitle").value="";
+document.getElementById("description").value="";
+
+toast("postToast","Your problem has been posted successfully!");
+
+render();
+
+}
+
+
+// ACCEPT A PROBLEM
+
+function acceptProblem(id){
+
+let p=store.problems.find(x=>x.id===id);
+
+if(!p || p.status!=="Open")return;
+
+if(p.owner===currentEmail){
+alert("You cannot accept your own problem.");
+return;
+}
+
+p.status="In Progress";
+p.helper=currentEmail;
+p.helperName=user().name;
+
+save();
+
+openRoom(id);
+
+}
+
+
+// OPEN LEARNING ROOM
+
+function openRoom(id){
+
+let p=store.problems.find(x=>x.id===id);
+if(!p)return;
+
+activeId=id;
+
+document.getElementById("roomTitle").textContent=p.title;
+document.getElementById("roomSubject").textContent=p.subject+" • "+p.status;
+document.getElementById("roomDescription").textContent=p.description;
+
+document.getElementById("ownerName").textContent=p.ownerName;
+document.getElementById("helperName").textContent=p.helperName || "Waiting for helper";
+
+document.getElementById("answer").value=p.answer || "";
+document.getElementById("answer").disabled=
+p.status==="Waiting for Confirmation" || p.status==="Completed";
+
+document.getElementById("submitAnswer").classList.toggle(
+"hidden",p.helper!==currentEmail || p.status!=="In Progress"
+);
+
+document.getElementById("confirmAnswer").classList.toggle(
+"hidden",p.owner!==currentEmail || p.status!=="Waiting for Confirmation"
+);
+
+page("room");
+
+}
+
+
+// SUBMIT EXPLANATION
+
+function submitAnswer(){
+
+let p=store.problems.find(x=>x.id===activeId);
+let answer=document.getElementById("answer").value.trim();
+
+if(!p || p.helper!==currentEmail || p.status!=="In Progress")return;
+
+if(!answer){
+alert("Please write an explanation.");
+return;
+}
+
+p.answer=answer;
+p.status="Waiting for Confirmation";
+
+save();
+
+toast("roomToast","Explanation submitted! Waiting for student confirmation.");
+
+openRoom(activeId);
+
+}
+
+
+// CONFIRM SOLUTION AND RELEASE COINS
+
+function confirmAnswer(){
+
+let p=store.problems.find(x=>x.id===activeId);
+
+if(!p || p.owner!==currentEmail || p.status!=="Waiting for Confirmation")return;
+
+let helper=store.users.find(u=>u.email===p.helper);
+
+if(!helper){
+alert("Helper account not found.");
+return;
+}
+
+p.status="Completed";
+
+helper.coins+=p.reward;
+
+let oldEmail=currentEmail;
+
+// Record the reward in the helper's wallet
+
+if(!store.history[p.helper])store.history[p.helper]=[];
+
+store.history[p.helper].push({
+text:"Reward earned: "+p.title,
+amount:p.reward
+});
+
+addHistory("Confirmed solution: "+p.title,0);
+
+save();
+
+alert("Solution confirmed! "+p.reward+" coins released to "+p.helperName+".");
+
+render();
+
+page("previous");
+
+}
+
+
+// PROFILE UPDATE
+
+function updateProfile(){
+
+let name=document.getElementById("editName").value.trim();
+let email=document.getElementById("editEmail").value.trim().toLowerCase();
+
+if(!name || !email.includes("@")){
+alert("Enter a valid name and email.");
+return;
+}
+
+let u=user();
+
+if(email!==currentEmail && store.users.some(x=>x.email===email)){
+alert("This email is already registered.");
+return;
+}
+
+// Update the account and references
+
+let old=currentEmail;
+
+u.name=name;
+u.email=email;
+
+store.problems.forEach(p=>{
+if(p.owner===old){
+p.owner=email;
+p.ownerName=name;
+}
+if(p.helper===old){
+p.helper=email;
+p.helperName=name;
+}
+});
+
+store.history[email]=store.history[old] || [];
+delete store.history[old];
+
+currentEmail=email;
+localStorage.setItem("d2e_current",email);
+
+save();
+render();
+
+alert("Profile updated successfully.");
+}
+
+
+// DIGITAL WHITEBOARD
+
+let canvas=document.getElementById("board");
+let ctx=canvas.getContext("2d");
+
+let drawing=false;
+let erasing=false;
+
+function position(e){
+let r=canvas.getBoundingClientRect();
+return {
+x:(e.clientX-r.left)*canvas.width/r.width,
+y:(e.clientY-r.top)*canvas.height/r.height
+};
+}
+
+canvas.addEventListener("pointerdown",e=>{
+drawing=true;
+let p=position(e);
+ctx.beginPath();
+ctx.moveTo(p.x,p.y);
+canvas.setPointerCapture(e.pointerId);
+});
+
+canvas.addEventListener("pointermove",e=>{
+if(!drawing)return;
+let p=position(e);
+ctx.lineWidth=erasing?22:4;
+ctx.lineCap="round";
+ctx.strokeStyle=erasing?"white":"#30245e";
+ctx.lineTo(p.x,p.y);
+ctx.stroke();
+});
+
+canvas.addEventListener("pointerup",()=>drawing=false);
+canvas.addEventListener("pointercancel",()=>drawing=false);
+
+function setPen(){erasing=false;}
+function setEraser(){erasing=true;}
+function clearBoard(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+
+
+// SCREEN SHARE DEMO
+
+async function shareScreen(){
+
+if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+alert("Screen sharing is not supported in this browser.");
+return;
+}
+
+try{
+let stream=await navigator.mediaDevices.getDisplayMedia({video:true});
+let video=document.createElement("video");
+video.srcObject=stream;
+video.autoplay=true;
+video.muted=true;
+video.style.width="100%";
+video.style.marginTop="12px";
+video.style.borderRadius="10px";
+
+document.getElementById("board").after(video);
+
+stream.getVideoTracks()[0].addEventListener("ended",()=>{
+video.remove();
+});
+
+}catch(e){
+alert("Screen sharing was cancelled or unavailable.");
+}
+
+}
+
+
+// VOICE AND VIDEO PLACEHOLDERS
+
+function callInfo(type){
+alert(type+" calling needs a real-time connection service. This feature is planned for the next version.");
+}
+
+
+// MESSAGE
+
+function toast(id,message){
+let el=document.getElementById(id);
+el.textContent=message;
+el.style.display="block";
+}
+
+
+// RESTORE LOGIN SESSION
+
+if(currentEmail && user()){
+openApp();
+}
+
+</script>
+</body>
+</html>
