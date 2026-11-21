@@ -1,0 +1,1143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEARN2EARN | Peer Learning Network</title>
+
+<style>
+:root{
+  --bg:#F7FAFB;--surface:#FFFFFF;--surface-soft:#EEF4F5;
+  --primary:#6F8994;--primary-dark:#405B66;--primary-light:#DDE9EC;
+  --ink:#202A30;--text:#504F5D;--muted:#7C858B;
+  --line:#E2E9EB;--gold:#A87928;--gold-bg:#FFF4DB;
+  --success:#26734D;--success-bg:#E7F5EC;--danger:#B64B4B;
+  --shadow:0 12px 34px rgba(42,65,73,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+button{cursor:pointer;border:0;border-radius:12px;padding:11px 17px;font:inherit;font-weight:700;transition:background .2s,transform .2s,box-shadow .2s}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #A6BBC5;outline-offset:2px}
+input,textarea,select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:11px;margin:7px 0 15px;font:inherit;color:var(--ink);background:#FCFDFD;transition:border .2s,box-shadow .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(111,137,148,.13)}
+textarea{min-height:110px;resize:vertical}
+label{color:var(--text)}
+.primary{background:var(--primary-dark);color:white;box-shadow:0 5px 14px rgba(64,91,102,.15)}
+.primary:hover{background:#314B55;transform:translateY(-1px)}
+.secondary{background:var(--primary-light);color:var(--primary-dark)}
+.secondary:hover{background:#CFDFE3}
+.danger{background:#FCEAEA;color:var(--danger)}
+.muted{color:var(--muted);font-size:14px}
+h1,h2,h3{color:var(--ink);line-height:1.25}
+h2{margin-top:0;letter-spacing:-.02em}
+p{margin-top:8px}
+.hidden{display:none!important}
+
+/* LOGIN AND SIGNUP */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 15% 15%,#E6EFF1 0,transparent 32%),radial-gradient(circle at 90% 85%,#EAF1F2 0,transparent 30%),var(--bg)}
+.auth-card{background:var(--surface);padding:38px;border:1px solid rgba(226,233,235,.9);border-radius:24px;width:100%;max-width:440px;box-shadow:var(--shadow)}
+.logo{font-size:29px;font-weight:850;letter-spacing:-1.2px;color:var(--primary-dark)}
+.logo span{color:var(--ink)}
+.tagline{color:var(--muted);margin-bottom:28px}
+.auth-card label{font-size:13px;font-weight:750}
+.auth-card button{width:100%;margin-top:8px;padding:13px}
+.switch{text-align:center;margin-top:22px;font-size:14px;color:var(--muted)}
+.switch a{color:var(--primary-dark);cursor:pointer;font-weight:800}
+
+/* MAIN APP HEADER */
+#app{display:none}
+header{background:rgba(255,255,255,.94);backdrop-filter:blur(12px);padding:14px max(5%,calc((100% - 1250px)/2));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line);box-shadow:0 3px 16px rgba(42,65,73,.035)}
+header .logo{font-size:23px}
+.header-right{display:flex;align-items:center;gap:12px}
+.coins{background:var(--gold-bg);color:var(--gold);padding:10px 16px;border-radius:25px;font-weight:800}
+.coins:hover{background:#FCEBC5}
+.avatar{width:43px;height:43px;border-radius:50%;padding:0;background:var(--primary-light);color:var(--primary-dark);font-weight:800;font-size:17px;border:2px solid white;box-shadow:0 0 0 1px var(--line)}
+
+/* PAGE LAYOUT */
+.layout{max-width:1250px;margin:30px auto;padding:0 20px;display:flex;gap:24px;align-items:flex-start}
+.sidebar{width:225px;flex-shrink:0;background:var(--surface);padding:13px;border:1px solid var(--line);border-radius:18px;height:max-content;position:sticky;top:88px;box-shadow:0 6px 22px rgba(42,65,73,.035)}
+.nav{width:100%;text-align:left;background:transparent;color:var(--text);margin:3px 0;padding:13px 14px;border-radius:11px;font-weight:650}
+.nav.active,.nav:hover{background:var(--surface-soft);color:var(--primary-dark)}
+main{flex:1;min-width:0}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .22s ease}
+@keyframes fadeIn{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.welcome{background:linear-gradient(120deg,#405B66,#78949E);padding:31px;border-radius:20px;color:white;margin-bottom:20px;box-shadow:0 12px 28px rgba(64,91,102,.16)}
+.welcome h1{color:white;margin:0;font-size:clamp(25px,3vw,34px);letter-spacing:-.7px}
+.welcome p{color:#E6EFF1;margin-bottom:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);padding:22px;border-radius:17px;margin-bottom:16px;box-shadow:0 5px 20px rgba(42,65,73,.035)}
+.card h3{margin-top:0;letter-spacing:-.2px}
+.action{cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s}
+.action:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#C6D6DA}
+.action .emoji{font-size:30px}
+.action h3{margin-bottom:7px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.item{padding:14px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.tag{display:inline-block;background:var(--surface-soft);color:var(--primary-dark);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:750;margin:3px 4px 3px 0}
+.reward{color:var(--gold);font-weight:800}
+.problem-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+.form-card{max-width:760px}
+.row{display:flex;gap:14px}
+.row>div{flex:1;min-width:0}
+.profile{display:flex;align-items:center;gap:15px;margin-bottom:22px}
+.big-avatar{width:68px;height:68px;flex-shrink:0;border-radius:50%;background:var(--primary-light);color:var(--primary-dark);display:grid;place-items:center;font-size:27px;font-weight:850}
+.balance{font-size:36px;font-weight:850;color:var(--gold);letter-spacing:-1px}
+.empty{text-align:center;padding:28px 20px;color:var(--muted);background:#F8FAFA;border:1px dashed #DCE5E7;border-radius:13px}
+.toast{padding:13px 15px;background:var(--success-bg);color:var(--success);border-radius:11px;margin:13px 0;display:none}
+
+/* MICRO-ANIMATIONS */
+@keyframes authEnter{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes floatIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softPulse{0%,100%{box-shadow:0 12px 28px rgba(64,91,102,.16)}50%{box-shadow:0 16px 36px rgba(64,91,102,.24)}}
+@keyframes coinPop{0%{transform:scale(.88)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+.auth-card{animation:authEnter .65s cubic-bezier(.2,.75,.25,1) both}
+.welcome{background-size:180% 180%;animation:softPulse 5s ease-in-out infinite,shimmer 12s ease infinite alternate}
+.page.active .welcome,.page.active>.card,.page.active>.grid,.page.active>.actions{animation:floatIn .48s ease both}
+.page.active .card{animation:floatIn .5s ease both}
+.page.active .card:nth-child(2){animation-delay:.07s}
+.page.active .card:nth-child(3){animation-delay:.13s}
+.page.active .card:nth-child(4){animation-delay:.19s}
+.action .emoji{display:inline-block;transition:transform .25s ease}
+.action:hover .emoji{transform:translateY(-4px) rotate(-7deg) scale(1.08)}
+button:active{transform:scale(.97)}
+.coins:active{animation:coinPop .28s ease}
+input,textarea,select{transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
+.card{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.card:hover{border-color:#D0DEE1}
+.nav{transition:background .2s ease,color .2s ease,transform .2s ease}
+.nav:hover{transform:translateX(3px)}
+.toast{animation:floatIn .3s ease both}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* LEARNING ROOM AND WHITEBOARD */
+canvas{display:block;width:100%;height:260px;border:1px solid #D7E1E4;border-radius:13px;background:white;touch-action:none}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+
+@media(max-width:850px){
+ .layout{gap:15px;padding:0 14px;margin:20px auto}
+ .sidebar{width:190px}
+ .card{padding:18px}
+}
+@media(max-width:700px){
+ .layout{display:block}
+ .sidebar{width:100%;display:flex;gap:5px;overflow-x:auto;position:static;margin-bottom:17px;padding:8px;border-radius:13px;scrollbar-width:thin}
+ .nav{white-space:nowrap;width:auto;flex-shrink:0;padding:10px 12px;margin:0;font-size:13px}
+ .grid,.actions{grid-template-columns:1fr}
+ .welcome{padding:24px}
+}
+@media(max-width:480px){
+ .auth-card{padding:27px 22px;border-radius:19px}
+ .row{display:block}
+ header{padding:11px 14px}
+ header .logo{font-size:20px}
+ .header-right{gap:8px}
+ .coins{padding:9px 11px;font-size:12px}
+ .avatar{width:39px;height:39px}
+ .layout{padding:0 12px;margin:15px auto}
+ .card{padding:17px;border-radius:14px}
+ .welcome{padding:21px;border-radius:15px}
+ .problem-actions button{flex:1}
+}
+
+/* =========================================================
+   LEARN2EARN — DARK FUTURISTIC REDESIGN
+   Visual layer only: existing HTML structure and JS actions
+   remain intact so the demo workflows continue to work.
+   ========================================================= */
+:root{
+  color-scheme:dark;
+  --bg:#080B14;
+  --surface:#101625;
+  --surface-2:#151E31;
+  --surface-3:#1B2740;
+  --primary:#8B7CFF;
+  --primary-2:#5DE4D1;
+  --ink:#F3F5FF;
+  --text:#D2D8EA;
+  --muted:#8994AD;
+  --line:rgba(157,174,218,.15);
+  --gold:#FFC96B;
+  --gold-bg:rgba(255,201,107,.12);
+  --success:#5CE0A0;
+  --success-bg:rgba(92,224,160,.12);
+  --danger:#FF718B;
+  --shadow:0 22px 70px rgba(0,0,0,.38);
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{
+  min-height:100vh;color:var(--ink);line-height:1.6;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(105,91,255,.16),transparent 34%),
+    radial-gradient(ellipse at 92% 18%,rgba(51,218,202,.09),transparent 28%),
+    linear-gradient(145deg,#080B14 0%,#0B1020 55%,#090D18 100%);
+  background-attachment:fixed;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.22;background-image:linear-gradient(rgba(151,169,220,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(151,169,220,.055) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+*{box-sizing:border-box}
+button{cursor:pointer;border:1px solid transparent;border-radius:12px;padding:11px 17px;font:inherit;font-weight:700;letter-spacing:.01em;transition:transform .22s ease,box-shadow .22s ease,background .22s ease,border-color .22s ease}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--primary-2);outline-offset:3px}
+input,textarea,select{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;margin:7px 0 15px;font:inherit;color:var(--ink);background:#0B1221;transition:border .2s,box-shadow .2s,background .2s}
+input::placeholder,textarea::placeholder{color:#68748F}
+input:focus,textarea:focus,select:focus{outline:none;border-color:rgba(139,124,255,.8);background:#0E1729;box-shadow:0 0 0 4px rgba(139,124,255,.12),0 0 24px rgba(139,124,255,.08)}
+select option{background:#101625;color:var(--ink)}
+textarea{min-height:115px;resize:vertical}
+label{color:#B9C3DA;font-size:13px;font-weight:700;letter-spacing:.025em}
+h1,h2,h3{color:var(--ink);line-height:1.22;letter-spacing:-.035em}
+h1{font-size:clamp(27px,4vw,38px)}h2{font-size:24px;margin-top:0}h3{font-size:17px}
+p{margin-top:8px}.muted{color:var(--muted);font-size:13px}.hidden{display:none!important}
+.primary{color:white;background:linear-gradient(110deg,#7667F6,#9B72FF);box-shadow:0 8px 24px rgba(125,103,246,.25)}
+.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(125,103,246,.38);filter:brightness(1.08)}
+.secondary{color:#D8D5FF;background:rgba(139,124,255,.12);border-color:rgba(139,124,255,.22)}
+.secondary:hover{background:rgba(139,124,255,.2);border-color:rgba(139,124,255,.42);transform:translateY(-1px)}
+.danger{color:#FF9BAC;background:rgba(255,113,139,.12);border-color:rgba(255,113,139,.2)}
+button:active{transform:scale(.97)}
+
+/* Auth: split-panel feel while preserving the original form */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;position:relative;overflow:hidden;background:transparent}
+#auth:before,#auth:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+#auth:before{width:430px;height:430px;left:-170px;top:-150px;border:1px solid rgba(139,124,255,.22);box-shadow:0 0 90px rgba(139,124,255,.13),inset 0 0 70px rgba(139,124,255,.08)}
+#auth:after{width:330px;height:330px;right:-120px;bottom:-120px;border:1px solid rgba(93,228,209,.18);box-shadow:0 0 100px rgba(93,228,209,.1)}
+.auth-card{position:relative;z-index:1;width:100%;max-width:465px;padding:42px;background:linear-gradient(150deg,rgba(22,31,51,.96),rgba(12,18,32,.97));border:1px solid rgba(164,178,225,.2);border-radius:26px;box-shadow:0 30px 100px rgba(0,0,0,.5),0 0 0 1px rgba(139,124,255,.05);backdrop-filter:blur(18px);animation:authRise .75s cubic-bezier(.2,.8,.2,1) both}
+.logo{font-size:29px;font-weight:900;letter-spacing:-.06em;color:#A99CFF;text-shadow:0 0 24px rgba(139,124,255,.3)}
+.logo span{color:#F2F4FF}
+.tagline{color:#94A1BC;margin-bottom:28px;font-size:13px}
+.auth-card label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.auth-card button{width:100%;margin-top:8px;min-height:47px}
+.switch{text-align:center;margin-top:22px;font-size:13px;color:var(--muted)}
+.switch a{color:#A99CFF;cursor:pointer;font-weight:800}
+.auth-card h2{font-size:27px;margin-bottom:5px}
+
+/* App shell / navigation */
+#app{display:none;min-height:100vh}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:13px clamp(18px,4vw,54px);background:rgba(8,12,23,.82);border-bottom:1px solid var(--line);backdrop-filter:blur(22px)}
+header .logo{font-size:23px}
+.header-right{display:flex;align-items:center;gap:12px}
+.coins{background:linear-gradient(120deg,rgba(255,201,107,.17),rgba(255,201,107,.08));color:var(--gold);border:1px solid rgba(255,201,107,.25);border-radius:999px;padding:10px 17px;box-shadow:0 0 25px rgba(255,201,107,.06)}
+.coins:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(255,201,107,.16)}
+.avatar{width:43px;height:43px;padding:0;border-radius:50%;background:linear-gradient(135deg,#7568F5,#40CDBF);color:white;font-size:17px;box-shadow:0 0 0 4px rgba(139,124,255,.12)}
+.layout{max-width:1500px;margin:0 auto;padding:28px clamp(14px,3vw,42px);display:grid;grid-template-columns:245px minmax(0,1fr);gap:24px;align-items:start}
+.sidebar{width:auto;flex-shrink:0;position:sticky;top:88px;height:calc(100vh - 112px);min-height:470px;overflow:auto;padding:16px 12px;background:rgba(15,23,39,.86);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.sidebar:before{content:"YOUR WORKSPACE";display:block;color:#687590;font-size:10px;font-weight:900;letter-spacing:.16em;padding:9px 12px 14px}
+.nav{width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:transparent;color:#9AA7C0;margin:3px 0;padding:13px 14px;border:1px solid transparent;border-radius:12px;font-size:13px;font-weight:700}
+.nav:hover{color:#F2F4FF;background:rgba(139,124,255,.08);border-color:rgba(139,124,255,.12);transform:translateX(3px)}
+.nav.active{color:#DCD8FF;background:linear-gradient(100deg,rgba(139,124,255,.2),rgba(139,124,255,.06));border-color:rgba(139,124,255,.22);box-shadow:inset 3px 0 #9B8BFF,0 8px 20px rgba(0,0,0,.12)}
+main{flex:1;min-width:0;padding-bottom:40px}
+.page{display:none;animation:pageEnter .42s cubic-bezier(.2,.75,.25,1) both}
+.page.active{display:block}
+
+/* Dashboard hero and cards */
+.welcome{position:relative;overflow:hidden;background:linear-gradient(115deg,#24204D 0%,#302A69 48%,#123D4B 100%);padding:clamp(25px,4vw,40px);border:1px solid rgba(174,164,255,.22);border-radius:22px;color:white;margin-bottom:22px;box-shadow:0 20px 55px rgba(49,42,112,.25)}
+.welcome:after{content:"✦";position:absolute;right:7%;top:-50px;font-size:190px;line-height:1;color:rgba(255,255,255,.055);transform:rotate(15deg);pointer-events:none}
+.welcome:before{content:"";position:absolute;width:220px;height:220px;right:13%;bottom:-165px;border:1px solid rgba(93,228,209,.25);border-radius:50%;box-shadow:0 0 0 25px rgba(93,228,209,.035),0 0 0 55px rgba(93,228,209,.025)}
+.welcome h1{position:relative;z-index:1;color:#fff;margin:0 0 8px}.welcome p{position:relative;z-index:1;color:#C9C9F5;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.card{position:relative;background:linear-gradient(145deg,rgba(20,29,48,.96),rgba(14,21,36,.98));border:1px solid var(--line);padding:22px;border-radius:18px;margin-bottom:17px;box-shadow:0 12px 32px rgba(0,0,0,.16);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.card:hover{border-color:rgba(139,124,255,.28);box-shadow:0 18px 42px rgba(0,0,0,.25)}
+.action{cursor:pointer;overflow:hidden;transition:transform .28s,border-color .28s,box-shadow .28s}
+.action:after{content:"";position:absolute;width:150px;height:150px;right:-70px;top:-75px;border-radius:50%;background:rgba(139,124,255,.07);transition:transform .35s}
+.action:hover{transform:translateY(-5px);border-color:rgba(139,124,255,.45);box-shadow:0 20px 45px rgba(0,0,0,.28),0 0 35px rgba(139,124,255,.08)}
+.action:hover:after{transform:scale(1.7)}
+.action .emoji{font-size:30px;filter:drop-shadow(0 5px 12px rgba(139,124,255,.28))}
+.action h3{margin-bottom:7px}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-top:18px}
+.item{padding:13px 0;border-bottom:1px solid var(--line);color:var(--text);font-size:13px}
+.item:last-child{border-bottom:0}
+.tag{display:inline-block;background:rgba(139,124,255,.13);color:#BEB5FF;border:1px solid rgba(139,124,255,.18);border-radius:999px;padding:4px 10px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.reward{color:var(--gold);font-weight:800}
+.problem-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.form-card{max-width:780px}
+.row{display:flex;gap:14px}.row>div{flex:1;min-width:0}
+.profile{display:flex;align-items:center;gap:15px;margin-bottom:24px;padding:17px;background:rgba(139,124,255,.07);border:1px solid rgba(139,124,255,.14);border-radius:16px}
+.big-avatar{width:66px;height:66px;flex-shrink:0;border-radius:20px;background:linear-gradient(135deg,#7969F7,#42CDBD);color:white;display:grid;place-items:center;font-size:27px;font-weight:900;box-shadow:0 10px 25px rgba(139,124,255,.22)}
+.balance{font-size:40px;font-weight:900;letter-spacing:-.05em;color:var(--gold);text-shadow:0 0 26px rgba(255,201,107,.13)}
+.empty{text-align:center;padding:28px;color:#8994AD;background:rgba(7,12,22,.5);border:1px dashed rgba(157,174,218,.18);border-radius:14px;font-size:13px}
+.toast{padding:13px 15px;background:var(--success-bg);color:var(--success);border:1px solid rgba(92,224,160,.2);border-radius:12px;margin:12px 0;display:none;animation:toastIn .3s ease both}
+
+/* Peer room / whiteboard */
+#room>.card{border-color:rgba(93,228,209,.17)}
+#room .grid{gap:12px}
+#room .grid .card{background:rgba(7,14,26,.62);box-shadow:none}
+canvas{display:block;width:100%;height:280px;border:1px solid rgba(93,228,209,.28);border-radius:14px;background:#F9FBFF;touch-action:none;box-shadow:inset 0 0 25px rgba(0,0,0,.04)}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.tools button{font-size:12px}
+
+/* Entrance and interaction motion */
+@keyframes authRise{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes pageEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes coinPulse{0%,100%{box-shadow:0 0 0 rgba(255,201,107,0)}50%{box-shadow:0 0 25px rgba(255,201,107,.2)}}
+.coins{animation:coinPulse 4s ease-in-out infinite}
+@media(hover:hover){.avatar:hover{transform:rotate(-7deg) scale(1.06)}.big-avatar:hover{transform:rotate(4deg) scale(1.04)}}
+
+/* Responsive navigation */
+@media(max-width:900px){
+ .layout{grid-template-columns:1fr;gap:14px;padding-top:18px}
+ .sidebar{height:auto;min-height:0;position:static;display:flex;gap:5px;overflow-x:auto;padding:9px;border-radius:15px}
+ .sidebar:before{display:none}
+ .nav{white-space:nowrap;width:auto;flex:0 0 auto;margin:0;padding:11px 13px}
+ .nav:hover{transform:translateY(-2px)}
+}
+@media(max-width:620px){
+ #auth{padding:16px}.auth-card{padding:28px 22px;border-radius:20px}
+ header{padding:11px 14px}.header-right{gap:7px}.coins{padding:9px 12px;font-size:12px}.avatar{width:39px;height:39px}
+ .layout{padding:13px 12px}.sidebar{margin-bottom:2px}
+ .nav{font-size:12px;padding:10px 11px}
+ .grid,.actions{grid-template-columns:1fr;gap:10px}
+ .card{padding:18px;border-radius:15px}.welcome{padding:24px 20px;border-radius:18px}
+ .row{display:block}.balance{font-size:34px}
+ canvas{height:230px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN AND SIGNUP -->
+
+<section id="auth">
+<div class="auth-card">
+
+<div class="logo">LEARN<span>2EARN</span></div>
+<p class="tagline">Learn. Explain. Earn. | By Code Kanyarasi</p>
+
+<div id="loginForm">
+<h2>Welcome Back!</h2>
+<p class="muted">Login to continue your learning journey.</p>
+
+<label>College Email</label>
+<input id="loginEmail" type="email" placeholder="student@college.edu">
+
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter password">
+
+<button class="primary" onclick="login()">Login</button>
+
+<p class="switch">New student? <a onclick="toggleAuth()">Create Account</a></p>
+</div>
+
+<div id="signupForm" class="hidden">
+<h2>Create Account</h2>
+<p class="muted">Join the LEARN2EARN student community.</p>
+
+<label>Student Name</label>
+<input id="regName" placeholder="Enter your name">
+
+<label>College Email</label>
+<input id="regEmail" type="email" placeholder="Enter college email">
+
+<label>Password</label>
+<input id="regPassword" type="password" placeholder="Create password">
+
+<button class="primary" onclick="signup()">Sign Up</button>
+
+<p class="switch">Already registered? <a onclick="toggleAuth()">Login</a></p>
+</div>
+
+<p class="muted" style="text-align:center;font-size:11px">
+Hackathon demonstration • Demo accounts are stored in this browser.
+</p>
+
+</div>
+</section>
+
+
+<!-- MAIN APPLICATION -->
+
+<div id="app">
+
+<header>
+<div class="logo">L2E</div>
+
+<div class="header-right">
+<button class="coins" onclick="page('wallet')">
+🪙 <span id="topCoins">100</span>
+</button>
+<button class="avatar" onclick="page('profile')" id="topAvatar">S</button>
+</div>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar">
+<button class="nav active" data-page="dashboard" onclick="page('dashboard')">🏠 Dashboard</button>
+<button class="nav" data-page="solve" onclick="page('solve')">🔍 Solve Problem</button>
+<button class="nav" data-page="post" onclick="page('post')">➕ Post Problem</button>
+<button class="nav" data-page="previous" onclick="page('previous')">🕘 Previous Problems</button>
+<button class="nav" data-page="wallet" onclick="page('wallet')">🪙 Coin Wallet</button>
+<button class="nav" data-page="profile" onclick="page('profile')">👤 My Profile</button>
+<button class="nav" onclick="logout()">↪ Logout</button>
+</aside>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section class="page active" id="dashboard">
+
+<div class="welcome">
+<h1>Hello, <span id="helloName">Student</span>! 👋</h1>
+<p>Learn something new. Help someone. Earn coins.</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Previous Doubts</h3>
+<div id="dashPrevious"></div>
+<button class="secondary" onclick="page('previous')">View all</button>
+</div>
+
+<div class="card">
+<h3> My Coin Wallet</h3>
+<div class="balance"><span id="dashCoins">100</span></div>
+<p class="muted">Your available coins</p>
+<button class="secondary" onclick="page('wallet')">View wallet</button>
+</div>
+
+</div>
+
+<div class="actions">
+
+<div class="card action" onclick="page('solve')">
+<div class="emoji">🔍</div>
+<h3>Solve Problem</h3>
+<p class="muted">Help students with their doubts and earn coins.</p>
+<button class="primary">Find Problems</button>
+</div>
+
+<div class="card action" onclick="page('post')">
+<div class="emoji">✍️</div>
+<h3>Post Problem</h3>
+<p class="muted">Post your doubt and offer coins as a reward.</p>
+<button class="primary">Post a Doubt</button>
+</div>
+
+</div>
+</section>
+
+
+<!-- POST PROBLEM -->
+
+<section class="page" id="post">
+<div class="card form-card">
+<h2>Post a Problem ✍️</h2>
+<p class="muted">Ask your doubt and choose a reward.</p>
+
+<label>Problem Title</label>
+<input id="problemTitle" placeholder="Example: Explain Python inheritance">
+
+<div class="row">
+<div>
+<label>Subject</label>
+<select id="subject">
+<option>Python</option>
+<option>Mathematics</option>
+<option>Java</option>
+<option>HTML & CSS</option>
+<option>JavaScript</option>
+<option>Physics</option>
+<option>Other</option>
+</select>
+</div>
+<div>
+<label>Coin Reward</label>
+<input id="reward" type="number" min="1" value="20">
+</div>
+</div>
+
+<label>Describe Your Doubt</label>
+<textarea id="description" placeholder="Explain what you don't understand..."></textarea>
+
+<button class="primary" onclick="postProblem()">Post Problem</button>
+<div class="toast" id="postToast"></div>
+</div>
+</section>
+
+
+<!-- SOLVE PROBLEM -->
+
+<section class="page" id="solve">
+<h2>🔍 Solve Problems</h2>
+<p class="muted">Find questions and share your knowledge.</p>
+<div id="solveList"></div>
+</section>
+
+
+<!-- PREVIOUS PROBLEMS -->
+
+<section class="page" id="previous">
+<h2>🕘 Previous Problems</h2>
+<p class="muted">Track your questions and learning activities.</p>
+<div id="previousList"></div>
+</section>
+
+
+<!-- WALLET -->
+
+<section class="page" id="wallet">
+<div class="card">
+<h2>🪙 My Coin Wallet</h2>
+<p class="muted">Your available balance</p>
+<div class="balance"><span id="walletCoins">100</span> coins</div>
+<p class="muted">Earn coins by helping other students.</p>
+</div>
+
+<div class="card">
+<h3>Coin History</h3>
+<div id="history"></div>
+</div>
+</section>
+
+
+<!-- PROFILE -->
+
+<section class="page" id="profile">
+<div class="card form-card">
+<div class="profile">
+<div class="big-avatar" id="bigAvatar">S</div>
+<div>
+<h2 id="profileName">Student</h2>
+<p class="muted" id="profileEmail"></p>
+</div>
+</div>
+
+<h3>My Profile</h3>
+<label>Student Name</label>
+<input id="editName">
+
+<label>College Email</label>
+<input id="editEmail" type="email">
+
+<button class="primary" onclick="updateProfile()">Save Changes</button>
+</div>
+</section>
+
+
+<!-- LEARNING ROOM -->
+
+<section class="page" id="room">
+<button class="secondary" onclick="page('solve')">← Back</button>
+
+<div class="card" style="margin-top:15px">
+<h2>🎓 Peer Learning Room</h2>
+
+<h3 id="roomTitle"></h3>
+<p class="muted" id="roomSubject"></p>
+<p id="roomDescription"></p>
+
+<div class="grid">
+<div class="card">
+<b>🙋 Question Owner</b>
+<p id="ownerName"></p>
+</div>
+<div class="card">
+<b>🎓 Helper</b>
+<p id="helperName"></p>
+</div>
+</div>
+
+<h3>📝 Explanation</h3>
+<textarea id="answer" placeholder="Explain the topic step by step..."></textarea>
+
+<h3>🖊️ Digital Whiteboard</h3>
+<p class="muted">Draw and explain your solution below.</p>
+
+<div class="tools">
+<button class="secondary" onclick="setPen()">✏️ Pen</button>
+<button class="secondary" onclick="setEraser()">🧽 Eraser</button>
+<button class="secondary" onclick="clearBoard()">Clear</button>
+</div>
+
+<canvas id="board" width="900" height="400"></canvas>
+
+<div class="tools">
+<button class="secondary" onclick="shareScreen()">🖥️ Share Screen</button>
+<button class="secondary" onclick="callInfo('Voice')">🎤 Voice</button>
+<button class="secondary" onclick="callInfo('Video')">📹 Video</button>
+</div>
+
+<button class="primary" id="submitAnswer" onclick="submitAnswer()">Submit Explanation</button>
+
+<button class="primary hidden" id="confirmAnswer" onclick="confirmAnswer()">✅ Confirm Solution & Release Coins</button>
+
+<div class="toast" id="roomToast"></div>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+
+
+<script>
+
+// DATABASE FOR FRONTEND DEMO
+
+const DB = "d2e_judge_demo";
+
+let store = JSON.parse(localStorage.getItem(DB)) || {
+users:[],
+problems:[],
+history:{}
+};
+
+let currentEmail = localStorage.getItem("d2e_current") || "";
+let activeId = null;
+
+function save(){
+localStorage.setItem(DB,JSON.stringify(store));
+}
+
+function user(){
+return store.users.find(u=>u.email===currentEmail);
+}
+
+function myHistory(){
+return store.history[currentEmail] || [];
+}
+
+function addHistory(text,amount){
+if(!store.history[currentEmail])store.history[currentEmail]=[];
+store.history[currentEmail].push({text,amount});
+}
+
+
+// AUTHENTICATION
+
+function toggleAuth(){
+document.getElementById("loginForm").classList.toggle("hidden");
+document.getElementById("signupForm").classList.toggle("hidden");
+}
+
+function signup(){
+
+let name=document.getElementById("regName").value.trim();
+let email=document.getElementById("regEmail").value.trim().toLowerCase();
+let password=document.getElementById("regPassword").value;
+
+if(!name || !email.includes("@") || password.length<4){
+alert("Enter valid details. Password must have at least 4 characters.");
+return;
+}
+
+if(store.users.some(u=>u.email===email)){
+alert("This email is already registered. Please login.");
+return;
+}
+
+store.users.push({
+name,email,password,coins:100
+});
+
+store.history[email]=[{text:"Welcome bonus",amount:100}];
+
+save();
+
+alert("Account created! Please login.");
+toggleAuth();
+
+document.getElementById("loginEmail").value=email;
+}
+
+function login(){
+
+let email=document.getElementById("loginEmail").value.trim().toLowerCase();
+let password=document.getElementById("loginPassword").value;
+
+let found=store.users.find(u=>u.email===email && u.password===password);
+
+if(!found){
+alert("Incorrect email or password. Please sign up first.");
+return;
+}
+
+currentEmail=email;
+localStorage.setItem("d2e_current",email);
+
+openApp();
+}
+
+function logout(){
+currentEmail="";
+localStorage.removeItem("d2e_current");
+
+document.getElementById("app").style.display="none";
+document.getElementById("auth").style.display="flex";
+
+document.getElementById("loginPassword").value="";
+}
+
+
+// PAGE NAVIGATION
+
+function page(id){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+
+document.querySelectorAll(".nav").forEach(n=>{
+n.classList.toggle("active",n.dataset.page===id);
+});
+
+render();
+
+window.scrollTo(0,0);
+}
+
+
+// OPEN DASHBOARD
+
+function openApp(){
+
+document.getElementById("auth").style.display="none";
+document.getElementById("app").style.display="block";
+
+render();
+page("dashboard");
+
+}
+
+
+// UPDATE ALL DISPLAY DATA
+
+function render(){
+
+let u=user();
+if(!u)return;
+
+document.getElementById("helloName").textContent=u.name;
+document.getElementById("topCoins").textContent=u.coins;
+document.getElementById("dashCoins").textContent=u.coins;
+document.getElementById("walletCoins").textContent=u.coins;
+
+document.getElementById("topAvatar").textContent=u.name[0].toUpperCase();
+document.getElementById("bigAvatar").textContent=u.name[0].toUpperCase();
+
+document.getElementById("profileName").textContent=u.name;
+document.getElementById("profileEmail").textContent=u.email;
+
+document.getElementById("editName").value=u.name;
+document.getElementById("editEmail").value=u.email;
+
+
+// PREVIOUS PROBLEMS
+
+let mine=store.problems.filter(p=>
+p.owner===currentEmail || p.helper===currentEmail
+);
+
+document.getElementById("dashPrevious").innerHTML=
+mine.length ?
+mine.slice(-3).reverse().map(p=>`
+<div class="item">
+<b>${esc(p.title)}</b><br>
+<span class="muted">${esc(p.subject)}</span>
+<span class="tag">${esc(p.status)}</span>
+</div>`).join("")
+:
+'<div class="empty">No previous doubts yet.</div>';
+
+document.getElementById("previousList").innerHTML=
+mine.map(p=>problemCard(p,false)).join("") ||
+'<div class="empty">Your previous problems will appear here.</div>';
+
+
+// SOLVE PROBLEMS
+
+let available=store.problems.filter(p=>
+p.status==="Open" && p.owner!==currentEmail
+);
+
+document.getElementById("solveList").innerHTML=
+available.map(p=>problemCard(p,true)).join("") ||
+'<div class="empty">No new problems available right now.</div>';
+
+
+// COIN HISTORY
+
+document.getElementById("history").innerHTML=
+myHistory().slice().reverse().map(h=>`
+<div class="item">
+${esc(h.text)}
+<b style="float:right">${h.amount>0?"+":""}${h.amount} coins</b>
+</div>`).join("") ||
+'<div class="empty">No transactions yet.</div>';
+
+}
+
+
+// SAFE TEXT DISPLAY
+
+function esc(value){
+return String(value).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
+
+
+// PROBLEM CARD
+
+function problemCard(p,canAccept){
+
+return `
+<div class="card">
+
+<h3>${esc(p.title)}</h3>
+
+<div class="muted">
+${esc(p.subject)} • Posted by ${esc(p.ownerName)}
+</div>
+
+<p>${esc(p.description)}</p>
+
+<p class="reward">🪙 ${p.reward} coins</p>
+
+<span class="tag">${esc(p.status)}</span>
+
+${p.helperName?`<p class="muted">Helper: ${esc(p.helperName)}</p>`:""}
+
+<div class="problem-actions">
+
+${canAccept?
+`<button class="primary" onclick="acceptProblem('${p.id}')">Accept Problem</button>`:
+`<button class="secondary" onclick="openRoom('${p.id}')">View Details</button>`}
+
+</div>
+</div>`;
+}
+
+
+// POST A PROBLEM
+
+function postProblem(){
+
+let title=document.getElementById("problemTitle").value.trim();
+let description=document.getElementById("description").value.trim();
+let subject=document.getElementById("subject").value;
+let reward=Number(document.getElementById("reward").value);
+
+let u=user();
+
+if(!title || !description || !Number.isInteger(reward) || reward<1){
+alert("Please enter all problem details and a valid coin reward.");
+return;
+}
+
+if(reward>u.coins){
+alert("Not enough coins in your wallet.");
+return;
+}
+
+// Reserve the reward
+
+u.coins-=reward;
+
+store.problems.unshift({
+id:Date.now().toString(),
+title,description,subject,reward,
+owner:currentEmail,
+ownerName:u.name,
+helper:"",
+helperName:"",
+status:"Open",
+answer:""
+});
+
+addHistory("Coins reserved for "+title,-reward);
+
+save();
+
+document.getElementById("problemTitle").value="";
+document.getElementById("description").value="";
+
+toast("postToast","Your problem has been posted successfully!");
+
+render();
+
+}
+
+
+// ACCEPT A PROBLEM
+
+function acceptProblem(id){
+
+let p=store.problems.find(x=>x.id===id);
+
+if(!p || p.status!=="Open")return;
+
+if(p.owner===currentEmail){
+alert("You cannot accept your own problem.");
+return;
+}
+
+p.status="In Progress";
+p.helper=currentEmail;
+p.helperName=user().name;
+
+save();
+
+openRoom(id);
+
+}
+
+
+// OPEN LEARNING ROOM
+
+function openRoom(id){
+
+let p=store.problems.find(x=>x.id===id);
+if(!p)return;
+
+activeId=id;
+
+document.getElementById("roomTitle").textContent=p.title;
+document.getElementById("roomSubject").textContent=p.subject+" • "+p.status;
+document.getElementById("roomDescription").textContent=p.description;
+
+document.getElementById("ownerName").textContent=p.ownerName;
+document.getElementById("helperName").textContent=p.helperName || "Waiting for helper";
+
+document.getElementById("answer").value=p.answer || "";
+document.getElementById("answer").disabled=
+p.status==="Waiting for Confirmation" || p.status==="Completed";
+
+document.getElementById("submitAnswer").classList.toggle(
+"hidden",p.helper!==currentEmail || p.status!=="In Progress"
+);
+
+document.getElementById("confirmAnswer").classList.toggle(
+"hidden",p.owner!==currentEmail || p.status!=="Waiting for Confirmation"
+);
+
+page("room");
+
+}
+
+
+// SUBMIT EXPLANATION
+
+function submitAnswer(){
+
+let p=store.problems.find(x=>x.id===activeId);
+let answer=document.getElementById("answer").value.trim();
+
+if(!p || p.helper!==currentEmail || p.status!=="In Progress")return;
+
+if(!answer){
+alert("Please write an explanation.");
+return;
+}
+
+p.answer=answer;
+p.status="Waiting for Confirmation";
+
+save();
+
+toast("roomToast","Explanation submitted! Waiting for student confirmation.");
+
+openRoom(activeId);
+
+}
+
+
+// CONFIRM SOLUTION AND RELEASE COINS
+
+function confirmAnswer(){
+
+let p=store.problems.find(x=>x.id===activeId);
+
+if(!p || p.owner!==currentEmail || p.status!=="Waiting for Confirmation")return;
+
+let helper=store.users.find(u=>u.email===p.helper);
+
+if(!helper){
+alert("Helper account not found.");
+return;
+}
+
+p.status="Completed";
+
+helper.coins+=p.reward;
+
+let oldEmail=currentEmail;
+
+// Record the reward in the helper's wallet
+
+if(!store.history[p.helper])store.history[p.helper]=[];
+
+store.history[p.helper].push({
+text:"Reward earned: "+p.title,
+amount:p.reward
+});
+
+addHistory("Confirmed solution: "+p.title,0);
+
+save();
+
+alert("Solution confirmed! "+p.reward+" coins released to "+p.helperName+".");
+
+render();
+
+page("previous");
+
+}
+
+
+// PROFILE UPDATE
+
+function updateProfile(){
+
+let name=document.getElementById("editName").value.trim();
+let email=document.getElementById("editEmail").value.trim().toLowerCase();
+
+if(!name || !email.includes("@")){
+alert("Enter a valid name and email.");
+return;
+}
+
+let u=user();
+
+if(email!==currentEmail && store.users.some(x=>x.email===email)){
+alert("This email is already registered.");
+return;
+}
+
+// Update the account and references
+
+let old=currentEmail;
+
+u.name=name;
+u.email=email;
+
+store.problems.forEach(p=>{
+if(p.owner===old){
+p.owner=email;
+p.ownerName=name;
+}
+if(p.helper===old){
+p.helper=email;
+p.helperName=name;
+}
+});
+
+store.history[email]=store.history[old] || [];
+delete store.history[old];
+
+currentEmail=email;
+localStorage.setItem("d2e_current",email);
+
+save();
+render();
+
+alert("Profile updated successfully.");
+}
+
+
+// DIGITAL WHITEBOARD
+
+let canvas=document.getElementById("board");
+let ctx=canvas.getContext("2d");
+
+let drawing=false;
+let erasing=false;
+
+function position(e){
+let r=canvas.getBoundingClientRect();
+return {
+x:(e.clientX-r.left)*canvas.width/r.width,
+y:(e.clientY-r.top)*canvas.height/r.height
+};
+}
+
+canvas.addEventListener("pointerdown",e=>{
+drawing=true;
+let p=position(e);
+ctx.beginPath();
+ctx.moveTo(p.x,p.y);
+canvas.setPointerCapture(e.pointerId);
+});
+
+canvas.addEventListener("pointermove",e=>{
+if(!drawing)return;
+let p=position(e);
+ctx.lineWidth=erasing?22:4;
+ctx.lineCap="round";
+ctx.strokeStyle=erasing?"white":"#30245e";
+ctx.lineTo(p.x,p.y);
+ctx.stroke();
+});
+
+canvas.addEventListener("pointerup",()=>drawing=false);
+canvas.addEventListener("pointercancel",()=>drawing=false);
+
+function setPen(){erasing=false;}
+function setEraser(){erasing=true;}
+function clearBoard(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+
+
+// SCREEN SHARE DEMO
+
+async function shareScreen(){
+
+if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+alert("Screen sharing is not supported in this browser.");
+return;
+}
+
+try{
+let stream=await navigator.mediaDevices.getDisplayMedia({video:true});
+let video=document.createElement("video");
+video.srcObject=stream;
+video.autoplay=true;
+video.muted=true;
+video.style.width="100%";
+video.style.marginTop="12px";
+video.style.borderRadius="10px";
+
+document.getElementById("board").after(video);
+
+stream.getVideoTracks()[0].addEventListener("ended",()=>{
+video.remove();
+});
+
+}catch(e){
+alert("Screen sharing was cancelled or unavailable.");
+}
+
+}
+
+
+// VOICE AND VIDEO PLACEHOLDERS
+
+function callInfo(type){
+alert(type+" calling needs a real-time connection service. This feature is planned for the next version.");
+}
+
+
+// MESSAGE
+
+function toast(id,message){
+let el=document.getElementById(id);
+el.textContent=message;
+el.style.display="block";
+}
+
+
+// RESTORE LOGIN SESSION
+
+if(currentEmail && user()){
+openApp();
+}
+
+</script>
+</body>
+</html>
